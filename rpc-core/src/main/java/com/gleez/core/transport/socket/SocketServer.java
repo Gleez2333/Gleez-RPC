@@ -1,7 +1,8 @@
-package com.gleez.core.transport;
+package com.gleez.core.transport.socket;
 
 import com.gleez.core.handler.RequestHandler;
 import com.gleez.core.registry.ServiceRegistry;
+import com.gleez.core.transport.api.RpcServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +15,8 @@ import java.util.concurrent.*;
  * @Author Gleez
  * @Date 2020/8/4 19:23
  */
-public class RpcServer {
+public class SocketServer implements RpcServer {
+
     private final ExecutorService threadPool;
     private static final Logger logger = LoggerFactory.getLogger(RpcServer.class);
     private static final int CORE_POOL_SIZE = 5;
@@ -24,7 +26,7 @@ public class RpcServer {
     private final ServiceRegistry serviceRegistry;
     private RequestHandler requestHandler = new RequestHandler();
 
-    public RpcServer(ServiceRegistry serviceRegistry) {
+    public SocketServer(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
         BlockingQueue<Runnable> workingQueue = new ArrayBlockingQueue<>(BLACKING_QUEUE_CAPACITY);
         ThreadFactory threadFactory = Executors.defaultThreadFactory();

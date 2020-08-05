@@ -4,7 +4,8 @@ import com.gleez.api.HelloService;
 import com.gleez.api.HelloService2;
 import com.gleez.core.registry.DefaultServiceRegistry;
 import com.gleez.core.registry.ServiceRegistry;
-import com.gleez.core.transport.RpcServer;
+import com.gleez.core.transport.api.RpcServer;
+import com.gleez.core.transport.socket.SocketServer;
 
 /**
  * @Author Gleez
@@ -17,7 +18,7 @@ public class TestServer {
         ServiceRegistry serviceRegistry = new DefaultServiceRegistry();
         serviceRegistry.registry(helloService);
         serviceRegistry.registry(helloService2);
-        RpcServer rpcServer = new RpcServer(serviceRegistry);
+        RpcServer rpcServer = new SocketServer(serviceRegistry);
         rpcServer.start(9000);
     }
 }

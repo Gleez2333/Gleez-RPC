@@ -1,4 +1,4 @@
-package com.gleez.core.transport;
+package com.gleez.core.transport.socket;
 
 import com.gleez.commom.entity.RpcRequest;
 import com.gleez.commom.entity.RpcResponse;

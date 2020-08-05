@@ -3,7 +3,7 @@ package com.gleez.client;
 import com.gleez.api.HelloObject;
 import com.gleez.api.HelloService;
 import com.gleez.api.HelloService2;
-import com.gleez.core.transport.RpcClientProxy;
+import com.gleez.core.transport.socket.RpcClientProxy;
 
 /**
  * @Author Gleez

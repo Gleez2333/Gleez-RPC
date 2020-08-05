@@ -1,7 +1,8 @@
-package com.gleez.core.transport;
+package com.gleez.core.transport.socket;
 
 import com.gleez.commom.entity.RpcRequest;
 import com.gleez.commom.entity.RpcResponse;
+import com.gleez.core.transport.api.RpcClient;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -27,15 +28,16 @@ public class RpcClientProxy implements InvocationHandler {
         return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class<?>[]{clazz}, this);
     }
 
+
     @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(Object proxy, Method method, Object[] args) {
         RpcRequest rpcRequest = RpcRequest.builder()
                 .interfaceName(method.getDeclaringClass().getName())
                 .methodName(method.getName())
                 .parameters(args)
                 .paramTypes(method.getParameterTypes())
                 .build();
-        RpcClient rpcClient = new RpcClient();
-        return ((RpcResponse)rpcClient.sendRequest(rpcRequest, host, port)).getData();
+        RpcClient rpcClient = new SocketClient(host, port);
+        return ((RpcResponse)rpcClient.sendRequest(rpcRequest)).getData();
     }
 }
