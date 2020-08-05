@@ -1,4 +1,4 @@
-package com.gleez.core;
+package com.gleez.core.transport;
 
 import com.gleez.commom.entity.RpcRequest;
 import org.slf4j.Logger;
