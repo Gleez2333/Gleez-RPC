@@ -15,13 +15,13 @@ import java.lang.reflect.Proxy;
  */
 public class RpcClientProxy implements InvocationHandler {
 
-    private String host;
-    private int port;
 
-    public RpcClientProxy(String host, int port) {
-        this.host = host;
-        this.port = port;
+    private final RpcClient client;
+
+    public RpcClientProxy(RpcClient client) {
+        this.client = client;
     }
+
 
     @SuppressWarnings("unchecked")
     public <T> T getProxy(Class<T> clazz) {
@@ -37,7 +37,6 @@ public class RpcClientProxy implements InvocationHandler {
                 .parameters(args)
                 .paramTypes(method.getParameterTypes())
                 .build();
-        RpcClient rpcClient = new SocketClient(host, port);
-        return ((RpcResponse)rpcClient.sendRequest(rpcRequest)).getData();
+        return ((RpcResponse)client.sendRequest(rpcRequest)).getData();
     }
 }

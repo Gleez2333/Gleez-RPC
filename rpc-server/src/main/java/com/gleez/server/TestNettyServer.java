@@ -5,20 +5,20 @@ import com.gleez.api.HelloService2;
 import com.gleez.core.registry.DefaultServiceRegistry;
 import com.gleez.core.registry.ServiceRegistry;
 import com.gleez.core.transport.api.RpcServer;
-import com.gleez.core.transport.socket.SocketServer;
+import com.gleez.core.transport.netty.server.NettyServer;
 
 /**
  * @Author Gleez
- * @Date 2020/8/4 19:55
+ * @Date 2020/8/5 16:22
  */
-public class TestServer {
+public class TestNettyServer {
     public static void main(String[] args) {
         HelloService helloService = new HelloServiceImpl();
         HelloService2 helloService2 = new HelloService2Impl();
-        ServiceRegistry serviceRegistry = new DefaultServiceRegistry();
-        serviceRegistry.registry(helloService);
-        serviceRegistry.registry(helloService2);
-        RpcServer rpcServer = new SocketServer(serviceRegistry);
-        rpcServer.start(9000);
+        ServiceRegistry registry = new DefaultServiceRegistry();
+        registry.registry(helloService);
+        registry.registry(helloService2);
+        RpcServer server = new NettyServer();
+        server.start(9000);
     }
 }

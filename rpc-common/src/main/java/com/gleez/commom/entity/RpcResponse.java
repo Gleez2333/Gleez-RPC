@@ -1,7 +1,9 @@
 package com.gleez.commom.entity;
 
 import com.gleez.commom.enumeration.ResponseCode;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -11,6 +13,8 @@ import java.io.Serializable;
  * 远程调用结果格式
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RpcResponse<T> implements Serializable {
 
     /**
