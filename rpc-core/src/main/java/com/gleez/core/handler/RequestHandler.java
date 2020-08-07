@@ -3,6 +3,8 @@ package com.gleez.core.handler;
 import com.gleez.commom.entity.RpcRequest;
 import com.gleez.commom.entity.RpcResponse;
 import com.gleez.commom.enumeration.ResponseCode;
+import com.gleez.core.provider.ServiceProvider;
+import com.gleez.core.provider.ServiceProviderImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,9 +19,15 @@ import java.lang.reflect.Method;
 public class RequestHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestHandler.class);
+    private static final ServiceProvider serviceProvider;
 
-    public Object handle(RpcRequest rpcRequest, Object service) {
+    static {
+        serviceProvider = new ServiceProviderImpl();
+    }
+
+    public Object handle(RpcRequest rpcRequest) {
         Object result = null;
+        Object service = serviceProvider.getServiceProvider(rpcRequest.getInterfaceName());
         try {
             result = invokeTargetMethod(rpcRequest, service);
             LOGGER.info("服务：{} 成功调用方法：{}", rpcRequest.getInterfaceName(), rpcRequest.getMethodName());

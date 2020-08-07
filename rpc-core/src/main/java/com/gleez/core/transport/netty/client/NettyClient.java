@@ -4,6 +4,9 @@ import com.gleez.commom.entity.RpcRequest;
 import com.gleez.commom.entity.RpcResponse;
 import com.gleez.core.coder.CommonDecoder;
 import com.gleez.core.coder.CommonEncoder;
+import com.gleez.core.registry.NacosServiceRegistry;
+import com.gleez.core.registry.ServiceRegistry;
+import com.gleez.core.serializer.CommonSerializer;
 import com.gleez.core.serializer.KryoSerializer;
 import com.gleez.core.transport.api.RpcClient;
 import io.netty.bootstrap.Bootstrap;
@@ -15,6 +18,8 @@ import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.InetSocketAddress;
+
 /**
  * @Author Gleez
  * @Date 2020/8/5 13:42
@@ -22,13 +27,13 @@ import org.slf4j.LoggerFactory;
 public class NettyClient implements RpcClient {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyClient.class);
-    private String host;
-    private int port;
-    private static final Bootstrap bootstrap;
 
-    public NettyClient(String host, int port) {
-        this.host = host;
-        this.port = port;
+    private static final Bootstrap bootstrap;
+    private final ServiceRegistry serviceRegistry;
+    private CommonSerializer serializer;
+
+    public NettyClient() {
+        this.serviceRegistry = new NacosServiceRegistry();
     }
 
     static {
@@ -48,11 +53,13 @@ public class NettyClient implements RpcClient {
                 });
     }
 
+
     @Override
     public Object sendRequest(RpcRequest rpcRequest) {
         try {
-            ChannelFuture future = bootstrap.connect(host, port).sync();
-            logger.info("客户端连接到服务器端 {}:{}", host, port);
+            InetSocketAddress inetSocketAddress = serviceRegistry.lookupService(rpcRequest.getInterfaceName());
+            ChannelFuture future = bootstrap.connect(inetSocketAddress.getHostName(), inetSocketAddress.getPort()).sync();
+            logger.info("客户端连接到服务器端 :", inetSocketAddress.getAddress());
             Channel channel = future.channel();
             if (channel != null) {
                 channel.writeAndFlush(rpcRequest).addListener(future1 -> {
@@ -72,5 +79,10 @@ public class NettyClient implements RpcClient {
             logger.error("发送消息时出错:", e);
         }
         return null;
+    }
+
+    @Override
+    public void setSerializer(CommonSerializer serializer) {
+        this.serializer = serializer;
     }
 }

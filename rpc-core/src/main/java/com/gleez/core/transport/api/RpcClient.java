@@ -1,6 +1,7 @@
 package com.gleez.core.transport.api;
 
 import com.gleez.commom.entity.RpcRequest;
+import com.gleez.core.serializer.CommonSerializer;
 
 /**
  * @Author Gleez
@@ -8,4 +9,6 @@ import com.gleez.commom.entity.RpcRequest;
  */
 public interface RpcClient {
     Object sendRequest(RpcRequest rpcRequest);
+
+    void setSerializer(CommonSerializer serializer);
 }

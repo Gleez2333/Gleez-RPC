@@ -1,8 +1,7 @@
-package com.gleez.core.transport.socket;
+package com.gleez.core.transport.api;
 
 import com.gleez.commom.entity.RpcRequest;
 import com.gleez.commom.entity.RpcResponse;
-import com.gleez.core.transport.api.RpcClient;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

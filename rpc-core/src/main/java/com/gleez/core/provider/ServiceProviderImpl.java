@@ -1,4 +1,4 @@
-package com.gleez.core.registry;
+package com.gleez.core.provider;
 
 import com.gleez.commom.enumeration.RpcError;
 import com.gleez.commom.exception.RpcException;
@@ -14,14 +14,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Author Gleez
  * @Date 2020/8/4 23:33
  */
-public class DefaultServiceRegistry implements ServiceRegistry {
+public class ServiceProviderImpl implements ServiceProvider {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultServiceRegistry.class);
+    private static final Logger logger = LoggerFactory.getLogger(ServiceProviderImpl.class);
     private static final Map<String, Object> serviceMap = new ConcurrentHashMap<>();
     private static final Set<String> registrySet = ConcurrentHashMap.newKeySet();
 
     @Override
-    public synchronized <T> void registry(T service) {
+    public synchronized <T> void addServiceProvider(T service) {
         String className = service.getClass().getCanonicalName();
         if (registrySet.contains(className)) return ;
         registrySet.add(className);
@@ -37,11 +37,13 @@ public class DefaultServiceRegistry implements ServiceRegistry {
     }
 
     @Override
-    public synchronized Object getService(String serviceName) {
+    public synchronized Object getServiceProvider(String serviceName) {
         Object o = serviceMap.get(serviceName);
         if (o == null) {
             throw new RpcException(RpcError.SERVICE_NOT_FOUND);
         }
         return o;
     }
+
+
 }

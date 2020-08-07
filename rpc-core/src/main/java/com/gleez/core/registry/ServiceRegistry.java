@@ -1,11 +1,15 @@
 package com.gleez.core.registry;
 
+import java.net.InetSocketAddress;
+
 /**
- * 服务注册接口
  * @Author Gleez
- * @Date 2020/8/4 23:31
+ * @Date 2020/8/7 15:01
  */
 public interface ServiceRegistry {
-    <T> void registry(T service);
-    Object getService(String serviceName);
+
+    void register(String serviceName, InetSocketAddress inetSocketAddress);
+
+    InetSocketAddress lookupService(String serviceName);
+
 }

@@ -2,9 +2,7 @@ package com.gleez.server;
 
 import com.gleez.api.HelloService;
 import com.gleez.api.HelloService2;
-import com.gleez.core.registry.DefaultServiceRegistry;
-import com.gleez.core.registry.ServiceRegistry;
-import com.gleez.core.transport.api.RpcServer;
+import com.gleez.core.serializer.KryoSerializer;
 import com.gleez.core.transport.socket.SocketServer;
 
 /**
@@ -15,10 +13,10 @@ public class TestSocketServer {
     public static void main(String[] args) {
         HelloService helloService = new HelloServiceImpl();
         HelloService2 helloService2 = new HelloService2Impl();
-        ServiceRegistry serviceRegistry = new DefaultServiceRegistry();
-        serviceRegistry.registry(helloService);
-        serviceRegistry.registry(helloService2);
-        RpcServer rpcServer = new SocketServer(serviceRegistry);
-        rpcServer.start(9000);
+        SocketServer socketServer = new SocketServer("127.0.0.1", 9998);
+        socketServer.setSerializer(new KryoSerializer());
+        socketServer.publishService(helloService, HelloService.class);
+        socketServer.publishService(helloService2, HelloService2.class);
+        socketServer.start();
     }
 }
