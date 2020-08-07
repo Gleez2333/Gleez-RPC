@@ -4,7 +4,7 @@ import com.gleez.commom.entity.RpcRequest;
 import com.gleez.commom.entity.RpcResponse;
 import com.gleez.core.coder.CommonDecoder;
 import com.gleez.core.coder.CommonEncoder;
-import com.gleez.core.serializer.JsonSerializer;
+import com.gleez.core.serializer.KryoSerializer;
 import com.gleez.core.transport.api.RpcClient;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -42,7 +42,7 @@ public class NettyClient implements RpcClient {
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         ChannelPipeline pipeline = socketChannel.pipeline();
                         pipeline.addLast(new CommonDecoder())
-                                .addLast(new CommonEncoder(new JsonSerializer()))
+                                .addLast(new CommonEncoder(new KryoSerializer()))
                                 .addLast(new NettyClientHandler());
                     }
                 });
