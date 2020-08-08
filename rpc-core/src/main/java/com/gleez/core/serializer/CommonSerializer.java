@@ -12,6 +12,9 @@ public interface CommonSerializer {
 
     int getCode();
 
+    Integer KRYO_SERIALIZER = 0;
+    Integer JSON_SERIALIZER = 1;
+
     static CommonSerializer getByCode(int code) {
         switch (code) {
             case 0:

@@ -15,7 +15,6 @@ public class TestNettyClient {
     public static void main(String[] args) {
 
         RpcClient client = new NettyClient();
-    //   client.setLoadBalance(new RoundRobinLoadBalance());
         client.setSerializer(new KryoSerializer());
         RpcClientProxy rpcClientProxy = new RpcClientProxy(client);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);

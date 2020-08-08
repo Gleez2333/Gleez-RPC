@@ -27,7 +27,6 @@ public class RpcClientProxy implements InvocationHandler {
         return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class<?>[]{clazz}, this);
     }
 
-
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
         RpcRequest rpcRequest = RpcRequest.builder()
@@ -39,3 +38,5 @@ public class RpcClientProxy implements InvocationHandler {
         return ((RpcResponse)client.sendRequest(rpcRequest)).getData();
     }
 }
+
+

@@ -1,16 +1,12 @@
 package com.gleez.core.transport.netty.server;
 
-import com.gleez.commom.enumeration.RpcError;
-import com.gleez.commom.exception.RpcException;
 import com.gleez.core.coder.CommonDecoder;
 import com.gleez.core.coder.CommonEncoder;
-import com.gleez.core.provider.ServiceProvider;
 import com.gleez.core.provider.ServiceProviderImpl;
 import com.gleez.core.registry.NacosServiceRegistry;
-import com.gleez.core.registry.ServiceRegistry;
 import com.gleez.core.serializer.CommonSerializer;
 import com.gleez.core.serializer.KryoSerializer;
-import com.gleez.core.transport.api.RpcServer;
+import com.gleez.core.transport.api.AbstractRpcServer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -21,20 +17,15 @@ import io.netty.handler.logging.LoggingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.InetSocketAddress;
-
 /**
  * Netty服务提供侧
  * @Author Gleez
  * @Date 2020/8/5 12:46
  */
-public class NettyServer implements RpcServer {
+public class NettyServer extends AbstractRpcServer {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyServer.class);
-    private final String host;
-    private final int port;
-    private final ServiceRegistry serviceRegistry;
-    private final ServiceProvider serviceProvider;
+
     private CommonSerializer serializer;
 
     public NettyServer(String host, int port) {
@@ -42,6 +33,7 @@ public class NettyServer implements RpcServer {
         this.port = port;
         serviceRegistry = new NacosServiceRegistry();
         serviceProvider = new ServiceProviderImpl();
+        scanServices();
     }
 
 
@@ -82,18 +74,6 @@ public class NettyServer implements RpcServer {
             workerGroup.shutdownGracefully();
         }
 
-    }
-
-
-    @Override
-    public <T> void publishService(Object service, Class<T> serviceClass) {
-
-        if(serializer == null) {
-            logger.error("未设置序列化器");
-            throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
-        }
-        serviceProvider.addServiceProvider(service);
-        serviceRegistry.register(serviceClass.getCanonicalName(), new InetSocketAddress(host, port));
     }
 
     @Override

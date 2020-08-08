@@ -21,10 +21,9 @@ public class ServiceProviderImpl implements ServiceProvider {
     private static final Set<String> registrySet = ConcurrentHashMap.newKeySet();
 
     @Override
-    public synchronized <T> void addServiceProvider(T service) {
-        String className = service.getClass().getCanonicalName();
-        if (registrySet.contains(className)) return ;
-        registrySet.add(className);
+    public synchronized <T> void addServiceProvider(T service, String serviceName) {
+        if (registrySet.contains(serviceName)) return ;
+        registrySet.add(serviceName);
         Class<?>[] interfaces = service.getClass().getInterfaces();
         if (interfaces.length == 0) {
             // 如果接口数目为0，说明注册的类没有实现接口
@@ -33,7 +32,7 @@ public class ServiceProviderImpl implements ServiceProvider {
         for (Class<?> anInterface : interfaces) {
             serviceMap.put(anInterface.getCanonicalName(), service);
         }
-        logger.info("向接口：{} 注册服务： {}", interfaces, className);
+        logger.info("向接口：{} 注册服务： {}", interfaces, serviceName);
     }
 
     @Override
