@@ -4,10 +4,11 @@ import com.gleez.commom.entity.RpcRequest;
 import com.gleez.commom.entity.RpcResponse;
 import com.gleez.core.coder.CommonDecoder;
 import com.gleez.core.coder.CommonEncoder;
-import com.gleez.core.registry.NacosServiceRegistry;
-import com.gleez.core.registry.ServiceRegistry;
+import com.gleez.core.loadbanlance.LoadBalance;
+import com.gleez.core.registry.NacosServiceDiscovery;
+import com.gleez.core.registry.ServiceDiscovery;
 import com.gleez.core.serializer.CommonSerializer;
-import com.gleez.core.serializer.KryoSerializer;
+import com.gleez.core.serializer.JsonSerializer;
 import com.gleez.core.transport.api.RpcClient;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -29,11 +30,11 @@ public class NettyClient implements RpcClient {
     private static final Logger logger = LoggerFactory.getLogger(NettyClient.class);
 
     private static final Bootstrap bootstrap;
-    private final ServiceRegistry serviceRegistry;
+    private final ServiceDiscovery serviceDiscovery;
     private CommonSerializer serializer;
 
     public NettyClient() {
-        this.serviceRegistry = new NacosServiceRegistry();
+        this.serviceDiscovery = new NacosServiceDiscovery();
     }
 
     static {
@@ -47,7 +48,7 @@ public class NettyClient implements RpcClient {
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         ChannelPipeline pipeline = socketChannel.pipeline();
                         pipeline.addLast(new CommonDecoder())
-                                .addLast(new CommonEncoder(new KryoSerializer()))
+                                .addLast(new CommonEncoder(new JsonSerializer()))
                                 .addLast(new NettyClientHandler());
                     }
                 });
@@ -57,7 +58,7 @@ public class NettyClient implements RpcClient {
     @Override
     public Object sendRequest(RpcRequest rpcRequest) {
         try {
-            InetSocketAddress inetSocketAddress = serviceRegistry.lookupService(rpcRequest.getInterfaceName());
+            InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcRequest.getInterfaceName());
             ChannelFuture future = bootstrap.connect(inetSocketAddress.getHostName(), inetSocketAddress.getPort()).sync();
             logger.info("客户端连接到服务器端 :", inetSocketAddress.getAddress());
             Channel channel = future.channel();
@@ -84,5 +85,10 @@ public class NettyClient implements RpcClient {
     @Override
     public void setSerializer(CommonSerializer serializer) {
         this.serializer = serializer;
+    }
+
+    @Override
+    public void setLoadBalance(LoadBalance loadBalance) {
+        this.serviceDiscovery.setLoadBalance(loadBalance);
     }
 }
