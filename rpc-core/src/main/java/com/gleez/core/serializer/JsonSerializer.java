@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 /**
+ * 基于json的序列化器
  * @Author Gleez
  * @Date 2020/8/5 14:27
  */

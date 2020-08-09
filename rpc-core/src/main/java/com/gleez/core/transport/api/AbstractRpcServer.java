@@ -7,6 +7,7 @@ import com.gleez.core.annotation.Service;
 import com.gleez.core.annotation.ServiceScan;
 import com.gleez.core.provider.ServiceProvider;
 import com.gleez.core.registry.ServiceRegistry;
+import com.gleez.core.serializer.CommonSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +24,8 @@ public abstract class AbstractRpcServer implements RpcServer{
 
     protected String host;
     protected int port;
+    protected CommonSerializer serializer;
+
 
     protected ServiceRegistry serviceRegistry;
     protected ServiceProvider serviceProvider;

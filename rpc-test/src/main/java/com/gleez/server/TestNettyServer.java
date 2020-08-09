@@ -1,7 +1,7 @@
 package com.gleez.server;
 
 import com.gleez.core.annotation.ServiceScan;
-import com.gleez.core.serializer.KryoSerializer;
+import com.gleez.core.serializer.ProtobufSerializer;
 import com.gleez.core.transport.api.RpcServer;
 import com.gleez.core.transport.netty.server.NettyServer;
 
@@ -13,7 +13,7 @@ import com.gleez.core.transport.netty.server.NettyServer;
 public class TestNettyServer {
     public static void main(String[] args) {
         RpcServer server = new NettyServer("127.0.0.1", 9999);
-        server.setSerializer(new KryoSerializer());
+        server.setSerializer(new ProtobufSerializer());
         server.start();
     }
 }

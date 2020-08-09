@@ -14,6 +14,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 /**
+ * Kryo序列化器
  * @Author Gleez
  * @Date 2020/8/7 13:03
  */

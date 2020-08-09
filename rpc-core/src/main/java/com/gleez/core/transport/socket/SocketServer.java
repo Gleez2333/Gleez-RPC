@@ -24,7 +24,6 @@ public class SocketServer extends AbstractRpcServer {
     private static final Logger logger = LoggerFactory.getLogger(RpcServer.class);
 
     private final ExecutorService threadPool;;
-    private CommonSerializer serializer;
     private RequestHandler requestHandler = new RequestHandler();
 
 

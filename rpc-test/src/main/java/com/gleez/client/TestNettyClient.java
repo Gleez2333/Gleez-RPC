@@ -1,6 +1,6 @@
 package com.gleez.client;
 
-import com.gleez.api.HelloObject;
+import com.gleez.api.ByeService;
 import com.gleez.api.HelloService;
 import com.gleez.core.serializer.KryoSerializer;
 import com.gleez.core.transport.api.RpcClient;
@@ -18,13 +18,13 @@ public class TestNettyClient {
         client.setSerializer(new KryoSerializer());
         RpcClientProxy rpcClientProxy = new RpcClientProxy(client);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);
-        HelloObject object = new HelloObject(1, "This is a message");
+        ByeService byeService = rpcClientProxy.getProxy(ByeService.class);
         for(int i=1;i<=10;++i) {
-            object.setId(i);
-            System.out.println(helloService.hello(object));
+            System.out.println(helloService.hello("第 " + i + " : 个消息"));
         }
-      //  HelloService2 helloService2 = rpcClientProxy.getProxy(HelloService2.class);
-        //object.setId(13);
-        //System.out.println(helloService2.hello2(object));
+        for (int i = 1; i <= 10; i++) {
+            System.out.println(byeService.bye(" " + i));
+        }
+
     }
 }
