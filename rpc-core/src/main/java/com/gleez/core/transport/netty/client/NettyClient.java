@@ -2,13 +2,14 @@ package com.gleez.core.transport.netty.client;
 
 import com.gleez.commom.entity.RpcRequest;
 import com.gleez.commom.entity.RpcResponse;
-import com.gleez.core.coder.CommonDecoder;
-import com.gleez.core.coder.CommonEncoder;
+import com.gleez.core.coder.NettyDecoder;
+import com.gleez.core.coder.NettyEncoder;
 import com.gleez.core.loadbanlance.LoadBalance;
+import com.gleez.core.loadbanlance.RoundRobinLoadBalance;
 import com.gleez.core.registry.NacosServiceDiscovery;
 import com.gleez.core.registry.ServiceDiscovery;
 import com.gleez.core.serializer.CommonSerializer;
-import com.gleez.core.serializer.JsonSerializer;
+import com.gleez.core.serializer.KryoSerializer;
 import com.gleez.core.transport.api.RpcClient;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -29,15 +30,25 @@ public class NettyClient implements RpcClient {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyClient.class);
 
-    private static final Bootstrap bootstrap;
+    private final Bootstrap bootstrap;
     private final ServiceDiscovery serviceDiscovery;
     private CommonSerializer serializer;
 
     public NettyClient() {
-        this.serviceDiscovery = new NacosServiceDiscovery();
+        this(new KryoSerializer(), new RoundRobinLoadBalance());
     }
 
-    static {
+    public NettyClient(CommonSerializer serializer) {
+        this(serializer, new RoundRobinLoadBalance());
+    }
+
+    public NettyClient(LoadBalance loadBalance) {
+        this(new KryoSerializer(), loadBalance);
+    }
+
+    public NettyClient(CommonSerializer serializer, LoadBalance loadBalance) {
+        this.serializer = serializer;
+        this.serviceDiscovery = new NacosServiceDiscovery(loadBalance);
         EventLoopGroup group = new NioEventLoopGroup();
         bootstrap = new Bootstrap();
         bootstrap.group(group)
@@ -47,8 +58,8 @@ public class NettyClient implements RpcClient {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         ChannelPipeline pipeline = socketChannel.pipeline();
-                        pipeline.addLast(new CommonDecoder())
-                                .addLast(new CommonEncoder(new JsonSerializer()))
+                        pipeline.addLast(new NettyDecoder())
+                                .addLast(new NettyEncoder(serializer))
                                 .addLast(new NettyClientHandler());
                     }
                 });
@@ -82,13 +93,4 @@ public class NettyClient implements RpcClient {
         return null;
     }
 
-    @Override
-    public void setSerializer(CommonSerializer serializer) {
-        this.serializer = serializer;
-    }
-
-    @Override
-    public void setLoadBalance(LoadBalance loadBalance) {
-        this.serviceDiscovery.setLoadBalance(loadBalance);
-    }
 }

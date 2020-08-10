@@ -2,7 +2,8 @@ package com.gleez.client;
 
 import com.gleez.api.ByeService;
 import com.gleez.api.HelloService;
-import com.gleez.core.serializer.KryoSerializer;
+import com.gleez.core.loadbanlance.RandomLoadBalance;
+import com.gleez.core.serializer.ProtobufSerializer;
 import com.gleez.core.transport.api.RpcClient;
 import com.gleez.core.transport.api.RpcClientProxy;
 import com.gleez.core.transport.netty.client.NettyClient;
@@ -14,8 +15,7 @@ import com.gleez.core.transport.netty.client.NettyClient;
 public class TestNettyClient {
     public static void main(String[] args) {
 
-        RpcClient client = new NettyClient();
-        client.setSerializer(new KryoSerializer());
+        RpcClient client = new NettyClient(new ProtobufSerializer(), new RandomLoadBalance());
         RpcClientProxy rpcClientProxy = new RpcClientProxy(client);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);
         ByeService byeService = rpcClientProxy.getProxy(ByeService.class);

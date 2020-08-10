@@ -1,19 +1,18 @@
 package com.gleez.core.transport.socket;
 
 import com.gleez.commom.entity.RpcRequest;
-import com.gleez.commom.enumeration.RpcError;
-import com.gleez.commom.exception.RpcException;
+import com.gleez.core.coder.SocketCoder;
 import com.gleez.core.loadbanlance.LoadBalance;
+import com.gleez.core.loadbanlance.RoundRobinLoadBalance;
 import com.gleez.core.registry.NacosServiceDiscovery;
 import com.gleez.core.registry.ServiceDiscovery;
 import com.gleez.core.serializer.CommonSerializer;
+import com.gleez.core.serializer.KryoSerializer;
 import com.gleez.core.transport.api.RpcClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
@@ -30,38 +29,41 @@ public class SocketClient implements RpcClient {
     private CommonSerializer serializer;
 
     public SocketClient() {
-        this.serviceDiscovery = new NacosServiceDiscovery();
+        this(new KryoSerializer(), new RoundRobinLoadBalance());
+    }
+
+    public SocketClient(CommonSerializer serializer) {
+        this(serializer, new RoundRobinLoadBalance());
+    }
+
+    public SocketClient(LoadBalance loadBalance) {
+        this(new KryoSerializer(), loadBalance);
+    }
+
+    public SocketClient(CommonSerializer serializer, LoadBalance loadBalance) {
+        this.serializer = serializer;
+        this.serviceDiscovery = new NacosServiceDiscovery(loadBalance);
     }
 
     @Override
     public Object sendRequest(RpcRequest request) {
-        if(serializer == null) {
-            logger.error("未设置序列化器");
-            throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
-        }
         InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(request.getInterfaceName());
         try(Socket socket = new Socket()) {
             socket.connect(inetSocketAddress);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
-            objectOutputStream.writeObject(request);
-            objectOutputStream.flush();
-            return objectInputStream.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+            SocketCoder.write(socket.getOutputStream(), request, serializer);
+//            ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+//            ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+//            objectOutputStream.writeObject(request);
+//            objectOutputStream.flush();
+//            return objectInputStream.readObject();
+            Object read = SocketCoder.read(socket.getInputStream());
+            return read;
+        } catch (IOException e) {
             logger.error("调用时发生错误"+e);
             return null;
         }
     }
 
-    @Override
-    public void setSerializer(CommonSerializer serializer) {
-        this.serializer = serializer;
-    }
-
-    @Override
-    public void setLoadBalance(LoadBalance loadBalance) {
-        this.serviceDiscovery.setLoadBalance(loadBalance);
-    }
 
 
 }

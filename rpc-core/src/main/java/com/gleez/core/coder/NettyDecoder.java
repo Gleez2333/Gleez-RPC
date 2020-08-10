@@ -18,9 +18,9 @@ import java.util.List;
  * @Author Gleez
  * @Date 2020/8/5 14:16
  */
-public class CommonDecoder extends ReplayingDecoder {
+public class NettyDecoder extends ReplayingDecoder {
 
-    private static final Logger logger = LoggerFactory.getLogger(CommonDecoder.class);
+    private static final Logger logger = LoggerFactory.getLogger(NettyDecoder.class);
     private static final int MAGIC_NUMBER = 0xCAFEBABE;
 
     @Override

@@ -11,11 +11,11 @@ import io.netty.handler.codec.MessageToByteEncoder;
  * @Author Gleez
  * @Date 2020/8/5 14:16
  */
-public class CommonEncoder extends MessageToByteEncoder {
+public class NettyEncoder extends MessageToByteEncoder {
 
     private static final int MAGIC_NUMBER = 0xCAFEBABE;
     private final CommonSerializer serializer;
-    public CommonEncoder(CommonSerializer serializer) {
+    public NettyEncoder(CommonSerializer serializer) {
         this.serializer = serializer;
     }
 

@@ -1,7 +1,7 @@
 package com.gleez.core.transport.netty.server;
 
-import com.gleez.core.coder.CommonDecoder;
-import com.gleez.core.coder.CommonEncoder;
+import com.gleez.core.coder.NettyDecoder;
+import com.gleez.core.coder.NettyEncoder;
 import com.gleez.core.provider.ServiceProviderImpl;
 import com.gleez.core.registry.NacosServiceRegistry;
 import com.gleez.core.serializer.CommonSerializer;
@@ -27,11 +27,15 @@ public class NettyServer extends AbstractRpcServer {
     private static final Logger logger = LoggerFactory.getLogger(NettyServer.class);
 
     public NettyServer(String host, int port) {
+        this(host, port, new KryoSerializer());
+    }
+
+    public NettyServer(String host, int port, CommonSerializer serializer) {
         this.host = host;
         this.port = port;
         serviceRegistry = new NacosServiceRegistry();
         serviceProvider = new ServiceProviderImpl();
-        serializer = new KryoSerializer();
+        this.serializer = serializer;
         scanServices();
     }
 
@@ -57,8 +61,8 @@ public class NettyServer extends AbstractRpcServer {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             ChannelPipeline pipeline = socketChannel.pipeline();
-                            pipeline.addLast(new CommonEncoder(serializer));
-                            pipeline.addLast(new CommonDecoder());
+                            pipeline.addLast(new NettyEncoder(serializer));
+                            pipeline.addLast(new NettyDecoder());
                             pipeline.addLast(new NettyServerHandler());
                         }
                     });
@@ -75,8 +79,4 @@ public class NettyServer extends AbstractRpcServer {
 
     }
 
-    @Override
-    public void setSerializer(CommonSerializer serializer) {
-        this.serializer = serializer;
-    }
 }

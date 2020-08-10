@@ -1,7 +1,5 @@
 package com.gleez.core.registry;
 
-import com.gleez.core.loadbanlance.LoadBalance;
-
 import java.net.InetSocketAddress;
 
 /**
@@ -11,8 +9,6 @@ import java.net.InetSocketAddress;
 public interface ServiceDiscovery {
 
     InetSocketAddress lookupService(String serviceName);
-
-    void setLoadBalance(LoadBalance loadBalance);
 
 
 }

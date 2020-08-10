@@ -7,7 +7,6 @@ import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.gleez.commom.enumeration.RpcError;
 import com.gleez.commom.exception.RpcException;
 import com.gleez.core.loadbanlance.LoadBalance;
-import com.gleez.core.loadbanlance.RandomLoadBalance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,10 +23,9 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
 
     private static final String SERVER_PORT = "127.0.0.1:8848";
     private static final NamingService namingService;
-    private LoadBalance loadBalance = new RandomLoadBalance();
+    private final LoadBalance loadBalance;
 
-    @Override
-    public void setLoadBalance(LoadBalance loadBalance) {
+    public NacosServiceDiscovery(LoadBalance loadBalance) {
         this.loadBalance = loadBalance;
     }
 

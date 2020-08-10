@@ -1,7 +1,6 @@
 package com.gleez.server;
 
 import com.gleez.core.annotation.ServiceScan;
-import com.gleez.core.serializer.KryoSerializer;
 import com.gleez.core.transport.socket.SocketServer;
 
 /**
@@ -12,7 +11,6 @@ import com.gleez.core.transport.socket.SocketServer;
 public class TestSocketServer {
     public static void main(String[] args) {
         SocketServer socketServer = new SocketServer("127.0.0.1", 9999);
-        socketServer.setSerializer(new KryoSerializer());
         socketServer.start();
     }
 }

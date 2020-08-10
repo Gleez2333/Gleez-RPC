@@ -5,6 +5,7 @@ import com.gleez.core.handler.RequestHandler;
 import com.gleez.core.provider.ServiceProviderImpl;
 import com.gleez.core.registry.NacosServiceRegistry;
 import com.gleez.core.serializer.CommonSerializer;
+import com.gleez.core.serializer.KryoSerializer;
 import com.gleez.core.transport.api.AbstractRpcServer;
 import com.gleez.core.transport.api.RpcServer;
 import org.slf4j.Logger;
@@ -26,10 +27,14 @@ public class SocketServer extends AbstractRpcServer {
     private final ExecutorService threadPool;;
     private RequestHandler requestHandler = new RequestHandler();
 
-
     public SocketServer(String host, int port) {
+        this(host, port, new KryoSerializer());
+    }
+
+    public SocketServer(String host, int port, CommonSerializer serializer) {
         this.host = host;
         this.port = port;
+        this.serializer = serializer;
         threadPool = ThreadPoolFactory.createDefaultThreadPool("socket-rpc-server");
         this.serviceRegistry = new NacosServiceRegistry();
         this.serviceProvider = new ServiceProviderImpl();
@@ -53,9 +58,5 @@ public class SocketServer extends AbstractRpcServer {
     }
 
 
-    @Override
-    public void setSerializer(CommonSerializer serializer) {
-        this.serializer = serializer;
-    }
 }
 

@@ -1,4 +1,4 @@
-package com.gleez.api.impl;
+package com.gleez.server.impl;
 
 import com.gleez.api.ByeService;
 import com.gleez.core.annotation.Service;
