@@ -3,7 +3,6 @@ package com.gleez.core.transport.netty.server;
 import com.gleez.core.coder.NettyDecoder;
 import com.gleez.core.coder.NettyEncoder;
 import com.gleez.core.provider.ServiceProviderImpl;
-import com.gleez.core.registry.NacosServiceRegistry;
 import com.gleez.core.serializer.CommonSerializer;
 import com.gleez.core.serializer.KryoSerializer;
 import com.gleez.core.transport.api.AbstractRpcServer;
@@ -33,7 +32,6 @@ public class NettyServer extends AbstractRpcServer {
     public NettyServer(String host, int port, CommonSerializer serializer) {
         this.host = host;
         this.port = port;
-        serviceRegistry = new NacosServiceRegistry();
         serviceProvider = new ServiceProviderImpl();
         this.serializer = serializer;
         scanServices();

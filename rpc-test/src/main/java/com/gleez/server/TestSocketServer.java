@@ -1,5 +1,6 @@
 package com.gleez.server;
 
+import com.gleez.core.annotation.NacosConfig;
 import com.gleez.core.annotation.ServiceScan;
 import com.gleez.core.transport.socket.SocketServer;
 
@@ -8,6 +9,7 @@ import com.gleez.core.transport.socket.SocketServer;
  * @Date 2020/8/4 19:55
  */
 @ServiceScan
+@NacosConfig("127.0.0.1:8848")
 public class TestSocketServer {
     public static void main(String[] args) {
         SocketServer socketServer = new SocketServer("127.0.0.1", 9999);

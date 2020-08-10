@@ -7,10 +7,9 @@ import com.gleez.core.coder.NettyEncoder;
 import com.gleez.core.loadbanlance.LoadBalance;
 import com.gleez.core.loadbanlance.RoundRobinLoadBalance;
 import com.gleez.core.registry.NacosServiceDiscovery;
-import com.gleez.core.registry.ServiceDiscovery;
 import com.gleez.core.serializer.CommonSerializer;
 import com.gleez.core.serializer.KryoSerializer;
-import com.gleez.core.transport.api.RpcClient;
+import com.gleez.core.transport.api.AbstractRpcClient;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -26,13 +25,12 @@ import java.net.InetSocketAddress;
  * @Author Gleez
  * @Date 2020/8/5 13:42
  */
-public class NettyClient implements RpcClient {
+public class NettyClient extends AbstractRpcClient {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyClient.class);
 
     private final Bootstrap bootstrap;
-    private final ServiceDiscovery serviceDiscovery;
-    private CommonSerializer serializer;
+
 
     public NettyClient() {
         this(new KryoSerializer(), new RoundRobinLoadBalance());
@@ -47,8 +45,9 @@ public class NettyClient implements RpcClient {
     }
 
     public NettyClient(CommonSerializer serializer, LoadBalance loadBalance) {
+        scan();
         this.serializer = serializer;
-        this.serviceDiscovery = new NacosServiceDiscovery(loadBalance);
+        this.serviceDiscovery = new NacosServiceDiscovery(nacosIp, loadBalance);
         EventLoopGroup group = new NioEventLoopGroup();
         bootstrap = new Bootstrap();
         bootstrap.group(group)

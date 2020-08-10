@@ -2,6 +2,7 @@ package com.gleez.client;
 
 import com.gleez.api.ByeService;
 import com.gleez.api.HelloService;
+import com.gleez.core.annotation.NacosConfig;
 import com.gleez.core.loadbanlance.RandomLoadBalance;
 import com.gleez.core.serializer.ProtobufSerializer;
 import com.gleez.core.transport.api.RpcClient;
@@ -12,9 +13,9 @@ import com.gleez.core.transport.netty.client.NettyClient;
  * @Author Gleez
  * @Date 2020/8/5 16:10
  */
+@NacosConfig("127.0.0.1:8848")
 public class TestNettyClient {
     public static void main(String[] args) {
-
         RpcClient client = new NettyClient(new ProtobufSerializer(), new RandomLoadBalance());
         RpcClientProxy rpcClientProxy = new RpcClientProxy(client);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);
