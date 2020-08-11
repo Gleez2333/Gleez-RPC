@@ -4,12 +4,13 @@ import com.gleez.commom.Utils.ReflectUtil;
 import com.gleez.commom.enumeration.RpcError;
 import com.gleez.commom.exception.RpcException;
 import com.gleez.core.annotation.NacosConfig;
-import com.gleez.core.registry.ServiceDiscovery;
+import com.gleez.core.registry.api.ServiceDiscovery;
 import com.gleez.core.serializer.CommonSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 抽象RPC客户端
  * @Author Gleez
  * @Date 2020/8/10 17:47
  */

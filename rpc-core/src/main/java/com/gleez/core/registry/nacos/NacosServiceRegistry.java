@@ -1,16 +1,18 @@
-package com.gleez.core.registry;
+package com.gleez.core.registry.nacos;
 
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingFactory;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.gleez.commom.enumeration.RpcError;
 import com.gleez.commom.exception.RpcException;
+import com.gleez.core.registry.api.ServiceRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 
 /**
+ * nacos服务注册
  * @Author Gleez
  * @Date 2020/8/7 15:05
  */

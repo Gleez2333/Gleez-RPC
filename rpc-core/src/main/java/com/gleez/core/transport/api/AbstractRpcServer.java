@@ -7,8 +7,8 @@ import com.gleez.core.annotation.NacosConfig;
 import com.gleez.core.annotation.Service;
 import com.gleez.core.annotation.ServiceScan;
 import com.gleez.core.provider.ServiceProvider;
-import com.gleez.core.registry.NacosServiceRegistry;
-import com.gleez.core.registry.ServiceRegistry;
+import com.gleez.core.registry.nacos.NacosServiceRegistry;
+import com.gleez.core.registry.api.ServiceRegistry;
 import com.gleez.core.serializer.CommonSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +17,7 @@ import java.net.InetSocketAddress;
 import java.util.Set;
 
 /**
+ * 抽象RPC服务端
  * @Author Gleez
  * @Date 2020/8/8 14:50
  */
@@ -41,7 +42,7 @@ public abstract class AbstractRpcServer implements RpcServer{
                 logger.error("启动类缺少 @ServiceScan 注解");
                 throw new RpcException(RpcError.SERVICE_SCAN_PACKAGE_NOT_FOUND);
             }
-            if(startClass.isAnnotationPresent(NacosConfig.class)) {
+            if(startClass.isAnnotationPresent(NacosConfig.class) && !"".equals(startClass.getAnnotation(NacosConfig.class).value())) {
                 serviceRegistry = new NacosServiceRegistry(startClass.getAnnotation(NacosConfig.class).value());
             } else  {
                 serviceRegistry = new NacosServiceRegistry();

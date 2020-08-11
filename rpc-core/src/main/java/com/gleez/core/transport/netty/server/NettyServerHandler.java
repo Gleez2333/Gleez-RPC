@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.ExecutorService;
 
 /**
+ * netty服务通信处理器
  * @Author Gleez
  * @Date 2020/8/5 15:51
  */

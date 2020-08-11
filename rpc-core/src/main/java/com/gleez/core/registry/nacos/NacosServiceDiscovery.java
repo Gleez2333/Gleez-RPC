@@ -1,4 +1,4 @@
-package com.gleez.core.registry;
+package com.gleez.core.registry.nacos;
 
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingFactory;
@@ -7,6 +7,7 @@ import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.gleez.commom.enumeration.RpcError;
 import com.gleez.commom.exception.RpcException;
 import com.gleez.core.loadbanlance.LoadBalance;
+import com.gleez.core.registry.api.ServiceDiscovery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +15,7 @@ import java.net.InetSocketAddress;
 import java.util.List;
 
 /**
+ * nacos服务发现
  * @Author Gleez
  * @Date 2020/8/8 13:36
  */

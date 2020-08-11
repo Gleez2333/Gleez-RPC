@@ -3,7 +3,7 @@ package com.gleez.core.transport.socket;
 import com.gleez.commom.factory.ThreadPoolFactory;
 import com.gleez.core.handler.RequestHandler;
 import com.gleez.core.provider.ServiceProviderImpl;
-import com.gleez.core.registry.NacosServiceRegistry;
+import com.gleez.core.registry.nacos.NacosServiceRegistry;
 import com.gleez.core.serializer.CommonSerializer;
 import com.gleez.core.serializer.KryoSerializer;
 import com.gleez.core.transport.api.AbstractRpcServer;
@@ -49,7 +49,7 @@ public class SocketServer extends AbstractRpcServer {
             Socket socket;
             while ((socket = serverSocket.accept()) != null) {
                 logger.info("消费者连接: {}:{}", socket.getInetAddress(), socket.getPort());
-                threadPool.execute(new RequestHandlerThread(socket, requestHandler, serviceRegistry, serializer));
+                threadPool.execute(new RequestHandlerThread(socket, requestHandler, serializer));
             }
             threadPool.shutdown();
         } catch (IOException e) {

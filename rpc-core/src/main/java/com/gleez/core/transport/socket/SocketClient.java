@@ -4,7 +4,7 @@ import com.gleez.commom.entity.RpcRequest;
 import com.gleez.core.coder.SocketCoder;
 import com.gleez.core.loadbanlance.LoadBalance;
 import com.gleez.core.loadbanlance.RoundRobinLoadBalance;
-import com.gleez.core.registry.NacosServiceDiscovery;
+import com.gleez.core.registry.nacos.NacosServiceDiscovery;
 import com.gleez.core.serializer.CommonSerializer;
 import com.gleez.core.serializer.KryoSerializer;
 import com.gleez.core.transport.api.AbstractRpcClient;

@@ -1,8 +1,9 @@
-package com.gleez.core.registry;
+package com.gleez.core.registry.api;
 
 import java.net.InetSocketAddress;
 
 /**
+ * 服务发现接口
  * @Author Gleez
  * @Date 2020/8/8 13:35
  */

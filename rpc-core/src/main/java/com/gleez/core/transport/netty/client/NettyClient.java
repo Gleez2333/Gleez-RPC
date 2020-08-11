@@ -6,7 +6,7 @@ import com.gleez.core.coder.NettyDecoder;
 import com.gleez.core.coder.NettyEncoder;
 import com.gleez.core.loadbanlance.LoadBalance;
 import com.gleez.core.loadbanlance.RoundRobinLoadBalance;
-import com.gleez.core.registry.NacosServiceDiscovery;
+import com.gleez.core.registry.nacos.NacosServiceDiscovery;
 import com.gleez.core.serializer.CommonSerializer;
 import com.gleez.core.serializer.KryoSerializer;
 import com.gleez.core.transport.api.AbstractRpcClient;
@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import java.net.InetSocketAddress;
 
 /**
+ * Netty通信客户端
  * @Author Gleez
  * @Date 2020/8/5 13:42
  */
