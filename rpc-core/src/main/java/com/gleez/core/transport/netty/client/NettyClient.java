@@ -6,7 +6,6 @@ import com.gleez.core.coder.NettyDecoder;
 import com.gleez.core.coder.NettyEncoder;
 import com.gleez.core.loadbanlance.LoadBalance;
 import com.gleez.core.loadbanlance.RoundRobinLoadBalance;
-import com.gleez.core.registry.nacos.NacosServiceDiscovery;
 import com.gleez.core.serializer.CommonSerializer;
 import com.gleez.core.serializer.KryoSerializer;
 import com.gleez.core.transport.api.AbstractRpcClient;
@@ -46,9 +45,8 @@ public class NettyClient extends AbstractRpcClient {
     }
 
     public NettyClient(CommonSerializer serializer, LoadBalance loadBalance) {
-        scan();
+        scan(loadBalance);
         this.serializer = serializer;
-        this.serviceDiscovery = new NacosServiceDiscovery(nacosIp, loadBalance);
         EventLoopGroup group = new NioEventLoopGroup();
         bootstrap = new Bootstrap();
         bootstrap.group(group)

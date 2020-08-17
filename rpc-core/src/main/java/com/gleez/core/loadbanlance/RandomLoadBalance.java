@@ -1,7 +1,5 @@
 package com.gleez.core.loadbanlance;
 
-import com.alibaba.nacos.api.naming.pojo.Instance;
-
 import java.util.List;
 import java.util.Random;
 
@@ -12,7 +10,7 @@ import java.util.Random;
  */
 public class RandomLoadBalance implements LoadBalance {
     @Override
-    public Instance select(List<Instance> instances) {
+    public Object select(List<?> instances) {
         if(instances == null) return null;
         return instances.get(new Random().nextInt(instances.size()));
     }

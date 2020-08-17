@@ -1,7 +1,5 @@
 package com.gleez.core.loadbanlance;
 
-import com.alibaba.nacos.api.naming.pojo.Instance;
-
 import java.util.List;
 
 /**
@@ -14,7 +12,7 @@ public class RoundRobinLoadBalance implements LoadBalance {
     private int index = 0;
 
     @Override
-    public Instance select(List<Instance> instances) {
+    public Object select(List<?> instances) {
         index %= instances.size();
         return instances.get(index++);
     }

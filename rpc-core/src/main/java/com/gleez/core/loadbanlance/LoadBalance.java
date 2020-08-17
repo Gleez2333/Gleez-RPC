@@ -1,7 +1,5 @@
 package com.gleez.core.loadbanlance;
 
-import com.alibaba.nacos.api.naming.pojo.Instance;
-
 import java.util.List;
 
 /**
@@ -11,6 +9,6 @@ import java.util.List;
  */
 public interface LoadBalance {
 
-    Instance select(List<Instance> instances);
+    Object select(List<?> instances);
 
 }

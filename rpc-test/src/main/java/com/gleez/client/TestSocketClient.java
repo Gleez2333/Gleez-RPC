@@ -1,7 +1,8 @@
 package com.gleez.client;
 
 import com.gleez.api.HelloService;
-import com.gleez.core.annotation.NacosConfig;
+import com.gleez.commom.enumeration.RegistryType;
+import com.gleez.core.annotation.RegistryConfig;
 import com.gleez.core.transport.api.RpcClientProxy;
 import com.gleez.core.transport.socket.SocketClient;
 
@@ -9,7 +10,7 @@ import com.gleez.core.transport.socket.SocketClient;
  * @Author Gleez
  * @Date 2020/8/4 19:57
  */
-@NacosConfig("127.0.0.1:8848")
+@RegistryConfig(type = RegistryType.NACOS, address = "127.0.0.1:8848")
 public class TestSocketClient {
     public static void main(String[] args) {
 
